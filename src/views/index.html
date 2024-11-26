@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>News Article Evaluator - AE</title>
+  </head>
+  <body>
+    <h1>News Article Evaluator</h1>
+    <form id="articleForm">
+      <input type="text" id="article-url" placeholder="Enter Article URL" />
+      <button type="submit" id="analyze-btn">Analyze</button>
+    </form>
+
+    <dialog id="results">
+      <h3>Sentiment Analysis Results:</h3>
+      <p id="sentiment">Results will appear here</p>
+      <button id="close">Check another article</button>
+    </dialog>
+
+    <footer>
+      <p>&copy;AE 2024.Copyrights reserved</p>
+    </footer>
+
+    <script src="bundle.js"></script>
+  </body>
+</html>
