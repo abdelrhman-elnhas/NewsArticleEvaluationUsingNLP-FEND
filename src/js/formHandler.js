@@ -9,7 +9,6 @@ export const handleFormSubmit = async (e) => {
 
   const dialog = document.getElementById("dialog");
   if (dialog) {
-    // Make sure dialog exists before trying to show it
     dialog.showModal();
   } else {
     console.error("Dialog element not found!");
