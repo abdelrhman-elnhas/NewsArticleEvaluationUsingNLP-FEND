@@ -1,11 +1,36 @@
-export const handleFormSubmit = async (event) => {
-  event.preventDefault();
+export const handleFormSubmit = async (e) => {
+  e.preventDefault();
 
   const url = document.getElementById("article-url").value;
+  const errorMessage = document.getElementById("errorMessage");
+
+  // Regex for URL validation
+  const urlRegex = /^(https?:\/\/)?([\w\d-]+\.)+[\w-]+(\/[\w-./?%&=]*)?$/i;
+
+  const dialog = document.getElementById("dialog");
+  if (dialog) {
+    // Make sure dialog exists before trying to show it
+    dialog.showModal();
+  } else {
+    console.error("Dialog element not found!");
+  }
 
   if (!url) {
-    alert("URL cannot be blank.");
+    if (errorMessage) {
+      errorMessage.textContent = "URL cannot be blank.";
+      errorMessage.style.display = "block";
+    }
     return;
+  } else if (!urlRegex.test(url)) {
+    if (errorMessage) {
+      errorMessage.textContent = "Invalid URL format. Please try again.";
+      errorMessage.style.display = "block";
+    }
+    return;
+  } else {
+    if (errorMessage) {
+      errorMessage.style.display = "none";
+    }
   }
 
   try {
@@ -21,28 +46,34 @@ export const handleFormSubmit = async (event) => {
 
     const data = await response.json();
     if (data.error) {
-      alert(`Error: ${data.error}`);
+      if (errorMessage) {
+        errorMessage.textContent = `Error: ${data.error}`;
+        errorMessage.style.display = "block";
+      }
       return;
     }
 
-    if (data && data !== "") {
-      document.getElementById("results").innerHTML = `
+    const results = document.getElementById("results");
+    if (results) {
+      results.innerHTML = `
         <p><strong>Polarity:</strong> ${data.polarity}</p>
         <p><strong>Subjectivity:</strong> ${data.subjectivity}</p>
-				<button id="close">Check Another Article</button>
+        <button id="close">Check Another Article</button>
       `;
-    } else {
-      document.getElementById("results").innerHTML = `
-        <p>No meaningful content found in the article. Please check the URL.</p>
-      `;
-    }
+      results.showModal();
 
-    document.getElementById("results").showModal();
-    document.getElementById("close").addEventListener("click", () => {
-      document.getElementById("results").close();
-    });
+      const closeButton = document.getElementById("close");
+      if (closeButton) {
+        closeButton.addEventListener("click", () => {
+          results.close();
+        });
+      }
+    }
   } catch (error) {
     console.error("Error:", error);
-    alert("Failed to fetch results. Please try again.");
+    if (errorMessage) {
+      errorMessage.textContent = "Failed to fetch results. Please try again.";
+      errorMessage.style.display = "block";
+    }
   }
 };

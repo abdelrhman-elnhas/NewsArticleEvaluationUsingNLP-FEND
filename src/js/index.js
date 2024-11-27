@@ -1,10 +1,11 @@
-import { handleFormSubmit } from "./formHandler.js";
+import { handleFormSubmit } from "../js/formHandler.js";
 
-document.addEventListener("DOMContentLoaded", () => {
+const form = document.getElementById("articleForm");
+export function handleForm() {
   const form = document.getElementById("articleForm");
-  if (form) {
-    form.addEventListener("submit", handleFormSubmit);
-  } else {
+  if (!form) {
     console.error("Form element not found!");
+    return;
   }
-});
+  form.addEventListener("submit", handleFormSubmit);
+}
