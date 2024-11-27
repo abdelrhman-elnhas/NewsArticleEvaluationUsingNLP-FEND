@@ -1,4 +1,4 @@
-import { handleFormSubmit } from "../js/formHandler";
+import { handleFormSubmit } from "../../js/formHandler";
 
 global.fetch = jest.fn(() =>
   Promise.resolve({

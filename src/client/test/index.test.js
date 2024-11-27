@@ -1,4 +1,4 @@
-import { handleForm } from "../js/index.js";
+import { handleForm } from "../../js/index.js";
 describe("Form Submission Tests", () => {
   beforeEach(() => {
     document.body.innerHTML = `
