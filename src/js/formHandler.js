@@ -2,34 +2,29 @@ export const handleFormSubmit = async (e) => {
   e.preventDefault();
 
   const url = document.getElementById("article-url").value;
-  const errorMessage = document.getElementById("errorMessage");
+  const errorMessage = document.getElementById("error-message");
 
-  // Regex for URL validation
-  const urlRegex = /^(https?:\/\/)?([\w\d-]+\.)+[\w-]+(\/[\w-./?%&=]*)?$/i;
-
-  const dialog = document.getElementById("dialog");
+  const dialog = document.getElementById("dialog"); // Ensure this matches your actual HTML
   if (dialog) {
     dialog.showModal();
   } else {
     console.error("Dialog element not found!");
+    return;
   }
 
+  // Regex for URL validation
+  const urlRegex = /^(https?:\/\/)?([\w\d-]+\.)+[\w-]+(\/[\w-./?%&=]*)?$/i;
+
   if (!url) {
-    if (errorMessage) {
-      errorMessage.textContent = "URL cannot be blank.";
-      errorMessage.style.display = "block";
-    }
+    errorMessage.textContent = "URL cannot be blank.";
+    errorMessage.style.display = "block";
     return;
   } else if (!urlRegex.test(url)) {
-    if (errorMessage) {
-      errorMessage.textContent = "Invalid URL format. Please try again.";
-      errorMessage.style.display = "block";
-    }
+    errorMessage.textContent = "Invalid URL format. Please try again.";
+    errorMessage.style.display = "block";
     return;
   } else {
-    if (errorMessage) {
-      errorMessage.style.display = "none";
-    }
+    errorMessage.style.display = "none"; // Clear error for valid URL
   }
 
   try {
@@ -44,35 +39,28 @@ export const handleFormSubmit = async (e) => {
     }
 
     const data = await response.json();
+
     if (data.error) {
-      if (errorMessage) {
-        errorMessage.textContent = `Error: ${data.error}`;
-        errorMessage.style.display = "block";
-      }
+      errorMessage.textContent = `Error: ${data.error}`;
+      errorMessage.style.display = "block";
       return;
     }
 
-    const results = document.getElementById("results");
+    // Populate results dialog
+    const results = document.getElementById("dialog");
     if (results) {
       results.innerHTML = `
         <p><strong>Polarity:</strong> ${data.polarity}</p>
         <p><strong>Subjectivity:</strong> ${data.subjectivity}</p>
         <button id="close">Check Another Article</button>
       `;
-      results.showModal();
 
       const closeButton = document.getElementById("close");
-      if (closeButton) {
-        closeButton.addEventListener("click", () => {
-          results.close();
-        });
-      }
+      closeButton.addEventListener("click", () => results.close());
     }
   } catch (error) {
     console.error("Error:", error);
-    if (errorMessage) {
-      errorMessage.textContent = "Failed to fetch results. Please try again.";
-      errorMessage.style.display = "block";
-    }
+    errorMessage.textContent = "Failed to fetch results. Please try again.";
+    errorMessage.style.display = "block";
   }
 };
